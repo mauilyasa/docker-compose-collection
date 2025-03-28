@@ -47,7 +47,7 @@ providers:
     exposedByDefault: false  #  Change this to true if you want to expose all services
     # Specify discovery network - This ensures correct name resolving and possible issues with containers, that are in multiple networks.
     # E.g. Database container in a separate network and a container in the frontend and database network.
-    network: traefik_proxy
+    network: frontend
   file:
     directory: /etc/traefik
     watch: true
