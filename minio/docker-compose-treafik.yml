@@ -1,0 +1,37 @@
+---
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${ROOT_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${ROOT_SECRET_KEY}
+    volumes:
+      - minio-data:/data
+    command: minio server /data --console-address 0.0.0.0:9001
+    networks:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      # MINIO API
+      - "traefik.http.routers.minio.rule=Host(`minio.yasco.tech`)"
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls=true"
+      - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.minio.service=minio-api"
+      - "traefik.http.services.minio-api.loadbalancer.server.port=9000"
+      # Web UI (Console)
+      - "traefik.http.routers.minio-console.rule=Host(`minio-console.yasco.tech`)"
+      - "traefik.http.routers.minio-console.entrypoints=websecure"
+      - "traefik.http.routers.minio-console.tls=true"
+      - "traefik.http.routers.minio-console.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+
+volumes:
+  minio-data:
+
+networks:
+  frontend:
+    external: true
