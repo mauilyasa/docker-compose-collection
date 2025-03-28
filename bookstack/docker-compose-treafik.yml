@@ -44,7 +44,7 @@ services:
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
     volumes:
-      - ./db_data:/config
+      - db_data:/config
     networks:
       - backend
     restart: unless-stopped
@@ -54,3 +54,6 @@ networks:
     external: true
   backend:
     driver: bridge
+
+volumes:
+  db_data:
