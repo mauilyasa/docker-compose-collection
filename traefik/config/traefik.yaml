@@ -1,0 +1,53 @@
+---
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+#  level: [TRACE, DEBUG, INFO, WARN, ERROR, FATAL]
+log:
+ level: DEBUG
+
+accesslog: {}
+
+## Enable API and Dashboard here, don't do in production
+# api:
+#   dashboard: true
+#   insecure: true
+
+entryPoints:
+  web:
+    address: :80
+    #  Redirect all HTTP to HTTPS
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: :443
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: ilyasamauit@hotmail.com
+      storage: /var/traefik/certs/cloudflare-acme.json
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+
+## Disable TLS Cert verification check
+# serversTransport:
+#   insecureSkipVerify: true
+
+providers:
+  docker:
+    exposedByDefault: false  #  Change this to true if you want to expose all services
+    # Specify discovery network - This ensures correct name resolving and possible issues with containers, that are in multiple networks.
+    # E.g. Database container in a separate network and a container in the frontend and database network.
+    network: traefik_proxy
+  file:
+    directory: /etc/traefik
+    watch: true
