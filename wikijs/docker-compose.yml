@@ -1,0 +1,34 @@
+services:
+  wikijs:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wikijs
+    ports:
+      - "3000:3000"
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: wijijs-db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASSWORD}
+    # volumes: # Uncomment this to change wiki.js  default favicon
+    #   - ./assets/favicons:/wiki/assets/favicons/
+    #   - ./assets/favicon.ico:/wiki/assets/favicon.ico 
+    depends_on:
+      - wijijs-db
+    restart: unless-stopped
+  wijijs-db:
+    image: postgres:15-alpine
+    container_name: wikijs-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    logging:
+      driver: none
+    volumes:
+      - wikijs-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  wikijs-data:
