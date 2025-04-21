@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       DB_TYPE: postgres
-      DB_HOST: wijijs-db
+      DB_HOST: wikijs-db
       DB_PORT: 5432
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -18,7 +18,7 @@ services:
     #   - ./assets/favicons:/wiki/assets/favicons/
     #   - ./assets/favicon.ico:/wiki/assets/favicon.ico          
     depends_on:
-      - wijijs-db
+      - wikijs-db
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wikijs.rule=Host(`wiki.local.yasco.tech`)"
@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.wikijs.tls.certresolver=letsencrypt"
       - "traefik.http.services.wikijs.loadbalancer.server.port=80"
     restart: unless-stopped
-  wijijs-db:
+  wikijs-db:
     image: postgres:15-alpine
     container_name: wikijs-db
     environment:

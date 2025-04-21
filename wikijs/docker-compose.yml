@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       DB_TYPE: postgres
-      DB_HOST: wijijs-db
+      DB_HOST: wikijs-db
       DB_PORT: 5432
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -17,7 +17,7 @@ services:
     depends_on:
       - wijijs-db
     restart: unless-stopped
-  wijijs-db:
+  wikijs-db:
     image: postgres:15-alpine
     container_name: wikijs-db
     environment:
