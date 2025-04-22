@@ -1,0 +1,21 @@
+---
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_ADDR: "http://vault:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_TOKEN}
+    volumes:
+      - ./config:/vault/config
+      - vault_data:/vault/data
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - proxy-network
+    entrypoint: vault server -config=/vault/config/config.hcl
+
+volumes:
+  vault_data:
