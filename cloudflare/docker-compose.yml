@@ -1,0 +1,23 @@
+---
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CF_TOKEN}
+    env_file:
+      - .env
+    networks:
+      - cf-proxy
+
+  ## You can put your app here or on another compose file with the same networks
+
+  # app:
+  #   ...
+  #   networks:
+  #     - cf-proxy
+
+
+networks:
+  cf-proxy:
+    driver: bridge
